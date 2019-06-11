@@ -31,35 +31,24 @@ function handleGetTypes(req, res) {
 app.get("/types", handleGetTypes);
 
 function handleGetPokemon(req, res) {
-  const { type, name } = req.query;
-  let results = POKEDEX.pokemon;
+  let response = POKEDEX.pokemon;
 
-  if (!name && !type) {
-    return res.status(200).json(results);
+  // filter our pokemon by name if name query param is present
+  if (req.query.name) {
+    response = response.filter(pokemon =>
+      // case insensitive searching
+      pokemon.name.toLowerCase().includes(req.query.name.toLowerCase())
+    )
   }
 
-  if (name && type) {
-    return res.status(400).send('Query must be one of type or name');
+  // filter our pokemon by type if type query param is present
+  if (req.query.type) {
+    response = response.filter(pokemon =>
+      pokemon.type.includes(req.query.type)
+    )
   }
 
-  if (!name) {
-    let lowerCaseArr = validTypes.map(type => type.toLowerCase()).includes(type.toLowerCase());
-    if (!lowerCaseArr) {
-      return res.status(400).send(`Type must be one of: ${validTypes.join(', ')}`);
-    }
-    results = results.filter(poke => poke.type.map(el => el.toLowerCase()).includes(type.toLowerCase()));
-  }
-
-  if(!type) {
-    const lowerCaseName = name.toLowerCase();
-    if (!results.filter(poke => poke.name.toLowerCase().includes(lowerCaseName))) {
-      return res.status(400).send('Pokemon name must exist');
-    };
-    results = results.filter(poke => poke.name.toLowerCase().includes(name.toLowerCase()));
-  }
-
-
-  return res.status(200).json(results);
+  res.json(response)
 };
 
 app.get('/pokemon', handleGetPokemon);
