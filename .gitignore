@@ -1,3 +1,1 @@
-node_modules
-/movies-data.json
-/temp.txt
+.env
