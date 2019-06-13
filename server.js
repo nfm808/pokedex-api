@@ -8,7 +8,6 @@ const POKEDEX = require('./pokedex.json');
 const app = express();
 const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common';
 app.use(morgan(morganSetting));
-app.use(cors());
 app.use(helmet());
 
 const validTypes = ['Bug', 'Dark', 'Dragon', 'Electric', `Fairy`, `Fighting`, `Fire`, `Flying`, `Ghost`, `Grass`, `Ground`, `Ice`, `Normal`, `Poison`, `Psychic`, `Rock`, `Steel`, `Water`];
